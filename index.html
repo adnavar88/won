@@ -20,12 +20,17 @@
       padding: 6px 12px;
       border: none;
       border-radius: 5px;
-      background-color: #333;
       color: #fff;
       cursor: pointer;
     }
+    .scientist-btn {
+      background-color: #f28b82; /* pastel red */
+    }
+    .philosopher-btn {
+      background-color: #aecbfa; /* pastel blue */
+    }
     .filter-btn:hover {
-      background-color: #555;
+      opacity: 0.8;
     }
   </style>
 </head>
@@ -33,10 +38,9 @@
   <h2>WoN Members Map</h2>
 
   <div>
-    <button class="filter-btn" onclick="showAll()">Show All</button>
-    <button class="filter-btn" onclick="filterMarkers('Scientist')">Scientists</button>
-    <button class="filter-btn" onclick="filterMarkers('Philosopher')">Philosopher</button>
-    <button class="filter-btn" onclick="filterMarkers('UX')">UX</button>
+    <button class="filter-btn" style="background-color:#666;" onclick="showAll()">Show All</button>
+    <button class="filter-btn scientist-btn" onclick="filterMarkers('Scientist')">Scientists</button>
+    <button class="filter-btn philosopher-btn" onclick="filterMarkers('Philosopher')">Philosophers</button>
   </div>
 
   <div id="map"></div>
@@ -49,10 +53,10 @@
       attribution: '&copy; OpenStreetMap contributors'
     }).addTo(map);
 
+    // Pastel icon URLs (manually tinted markers or use a consistent look)
     const iconUrls = {
       "Scientist": "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png",
-      "Philosopher": "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png",
-      "UX": "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png"
+      "Philosopher": "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-violet.png"
     };
 
     const shadowUrl = "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png";
