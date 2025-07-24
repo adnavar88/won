@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Team Members Map</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet/dist/leaflet.css"
+  />
+  <style>
+    #map {
+      height: 600px;
+      width: 100%;
+    }
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      margin: 0;
+    }
+  </style>
+</head>
+<body>
+  <h2>Team Members Map</h2>
+  <div id="map"></div>
+
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script>
+    const map = L.map('map').setView([39.8283, -98.5795], 4); // Center on USA
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    const members = [
+      { name: "Jane Doe", role: "Analyst", lat: 37.7749, lon: -122.4194 },
+      { name: "John Smith", role: "Sales Manager", lat: 30.2672, lon: -97.7431 },
+      { name: "Emily Zhang", role: "Engineer", lat: 40.7128, lon: -74.0060 }
+    ];
+
+    members.forEach(member => {
+      L.marker([member.lat, member.lon])
+        .addTo(map)
+        .bindPopup(`<b>${member.name}</b><br>${member.role}`);
+    });
+  </script>
+</body>
+</html>
