@@ -4,10 +4,7 @@
   <title>Team Members Map</title>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet/dist/leaflet.css"
-  />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
   <style>
     #map {
       height: 600px;
@@ -18,31 +15,80 @@
       text-align: center;
       margin: 0;
     }
+    .filter-btn {
+      margin: 5px;
+      padding: 6px 12px;
+      border: none;
+      border-radius: 5px;
+      background-color: #333;
+      color: #fff;
+      cursor: pointer;
+    }
+    .filter-btn:hover {
+      background-color: #555;
+    }
   </style>
 </head>
 <body>
   <h2>Team Members Map</h2>
+
+  <div>
+    <button class="filter-btn" onclick="showAll()">Show All</button>
+    <button class="filter-btn" onclick="filterMarkers('Scientist')">Scientists</button>
+    <button class="filter-btn" onclick="filterMarkers('Philosopher')">Philosopher</button>
+    <button class="filter-btn" onclick="filterMarkers('UX')">UX</button>
+  </div>
+
   <div id="map"></div>
 
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
   <script>
-    const map = L.map('map').setView([39.8283, -98.5795], 4); // Center on USA
+    const map = L.map('map').setView([20, 0], 2); // Global view
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; OpenStreetMap contributors'
     }).addTo(map);
 
+    // Define colors by category
+    const roleColors = {
+      "Scientist": "red",
+      "Philosopher": "blue",
+      "UX": "green"
+    };
+
+    // Member list with category
     const members = [
-      { name: "Jane Doe", role: "Analyst", lat: 37.7749, lon: -122.4194 },
-      { name: "John Smith", role: "Sales Manager", lat: 30.2672, lon: -97.7431 },
-      { name: "Emily Zhang", role: "Engineer", lat: 40.7128, lon: -74.0060 }
+      { name: "Adriana Sainz", role: "Senior Manager UX", category: "UX", lat: 37.7749, lon: -122.4194 },
+      { name: "Simone de Beauvoir", role: "Philosopher, Author of The Second Sex", category: "Philosopher", lat: 48.8566, lon: 2.3522 },
+      { name: "Rosalind Franklin", role: "DNA Structure Pioneer", category: "Scientist", lat: 51.5074, lon: -0.1278 },
+      { name: "Katherine Johnson", role: "NASA Mathematician, Hidden Figures", category: "Scientist", lat: 37.5407, lon: -77.4360 },
+      { name: "Jane Goodall", role: "Primatologist, Conservationist", category: "Scientist", lat: -6.7924, lon: 39.2083 }
     ];
 
+    const allMarkers = [];
+
+    // Add markers with colored icons
     members.forEach(member => {
-      L.marker([member.lat, member.lon])
-        .addTo(map)
-        .bindPopup(`<b>${member.name}</b><br>${member.role}`);
+      const icon = new L.Icon({
+        iconUrl: `https://chart.googleapis.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|${roleColors[member.category] || "gray"}`,
+        iconSize: [21, 34],
+        iconAnchor: [10, 34],
+        popupAnchor: [1, -34],
+      });
+
+      const marker = L.marker([member.lat, member.lon], { icon: icon })
+        .bindPopup(`<b>${member.name}</b><br>${member.role}`)
+        .addTo(map);
+
+      marker.category = member.category;
+      allMarkers.push(marker);
     });
-  </script>
-</body>
-</html>
+
+    // Filter function
+    function filterMarkers(category) {
+      allMarkers.forEach(marker => {
+        if (marker.category === category) {
+          map.addLayer(marker);
+        } else {
+          map.removeLayer(marker);
+        }
